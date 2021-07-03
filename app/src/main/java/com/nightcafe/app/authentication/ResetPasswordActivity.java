@@ -1,0 +1,45 @@
+package com.nightcafe.app.authentication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import com.nightcafe.app.R;
+
+public class ResetPasswordActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reset_password);
+
+        getSupportActionBar().hide(); //hide action bar
+
+        Button btn_done = findViewById(R.id.done);
+        ImageView back = findViewById(R.id.arrow);
+
+        btn_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResetPasswordActivity.this, SignInActivity.class);
+                startActivity(intent);
+//                finish();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResetPasswordActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+//                finish();
+            }
+        });
+
+
+    }
+}
