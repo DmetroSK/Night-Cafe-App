@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "571956728947",
+    "project_id": "night-cafe-316214",
+    "storage_bucket": "night-cafe-316214.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571956728947:android:6deb8df531980898cd8606",
+        "android_client_info": {
+          "package_name": "com.nightcafe.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571956728947-n2klqm22j3g9nv4rc8h9p7le9dl0o388.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiWctgY7TFRlNp11tEVtCR_kEcPmnQEws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571956728947-n2klqm22j3g9nv4rc8h9p7le9dl0o388.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
