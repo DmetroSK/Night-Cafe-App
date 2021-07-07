@@ -1,6 +1,7 @@
 package com.nightcafe.app.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().hide(); //hide action bar
 
         Button btn_next = findViewById(R.id.next);

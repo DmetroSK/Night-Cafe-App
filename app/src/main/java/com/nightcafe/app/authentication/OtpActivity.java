@@ -2,21 +2,21 @@ package com.nightcafe.app.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
+
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
 
-    String fullName,email,password,newPhone;
+    String fullName,email,newPhone;
     PinView pinFromUser;
     String codeBySystem;
 
@@ -42,6 +42,7 @@ public class OtpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().hide(); //hide action bar
 
         Button btn_submit = findViewById(R.id.submit);
@@ -52,7 +53,6 @@ public class OtpActivity extends AppCompatActivity {
 
         fullName = getIntent().getStringExtra("_fullName");
         email = getIntent().getStringExtra("_email");
-        password = getIntent().getStringExtra("_password");
         String phone = getIntent().getStringExtra("_phone");
 
         Integer set=Integer.valueOf(phone);
@@ -160,7 +160,7 @@ public class OtpActivity extends AppCompatActivity {
         DatabaseReference reference = rootNode.getReference("Users");
 
         //Create helperclass reference and store data using firebase
-        User addNewUser = new User(fullName, email, password, newPhone);
+        User addNewUser = new User(fullName, email, newPhone);
         reference.child(newPhone).setValue(addNewUser);
 
         //We will also create a Session here in next videos to keep the user logged In

@@ -2,6 +2,7 @@ package com.nightcafe.app.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,64 +25,58 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
 
 public class SignInActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
+    ProgressBar probar;
+    TextInputLayout phone;
+    String newPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().hide(); //hide action bar
 
         Button btn_signin = findViewById(R.id.signin);
-        Button btn_forgotpw = findViewById(R.id.forgotpw);
-        Button btn_signup = findViewById(R.id.signup);
-        Button btn_google = findViewById(R.id.google);
-
+        TextView btn_changeNum = findViewById(R.id.changeNum);
+        TextView btn_signup = findViewById(R.id.signup);
+        probar = findViewById(R.id.progressbar);
+        probar.setVisibility(View.GONE);
 
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-        btn_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("users/name");
-
-                myRef.setValue("Hello, World!");
-            }
-        });
 
 
         btn_signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                loginUser();
 
-            loginUser();
-
-        //        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-          //      startActivity(intent);
-//                finish();
             }
         });
 
 
-        btn_forgotpw.setOnClickListener(new View.OnClickListener() {
+        btn_changeNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-//                finish();
+
+                startActivity(new Intent(SignInActivity.this, ForgotPasswordActivity.class));
+                finish();
+
             }
         });
 
@@ -90,36 +86,82 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
-               finish();
+                finish();
+
             }
         });
 
     }
 
-    @Override
-    public void onRestart() {
-        super.onRestart();
 
+    private void loginUser() {
+
+
+        String user_phone = validatePhoneNumber();
+
+        Integer set=Integer.valueOf(user_phone);
+        newPhone = String.valueOf("+94"+set);
+        Log.d("tag", newPhone);
+        probar.setVisibility(View.VISIBLE);
+
+
+        if (TextUtils.isEmpty(newPhone)) {
+            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(newPhone);
+
+            checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        phone.setError(null);
+                        phone.setErrorEnabled(false);
+
+                        String data = snapshot.child(newPhone).child("email").getValue(String.class);
+                        Toast.makeText(SignInActivity.this, data, Toast.LENGTH_SHORT).show();
+                        Log.d("tag", data);
+                        probar.setVisibility(View.GONE);
+//                        Intent intent = new Intent(SignInActivity.this, OtpActivity.class);
+//                        intent.putExtra("_phone", newPhone);
+//
+//                        finish();
+
+                    } else {
+                        probar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "No such user exit", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    probar.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "Database Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
+    private String validatePhoneNumber() {
+        phone = findViewById(R.id.phone);
+        String user_phone = phone.getEditText().getText().toString().trim();
 
-    private void loginUser(){
-
-        TextInputLayout email = findViewById(R.id.username);
-        TextInputLayout password = findViewById(R.id.password);
-
-        String user_email = email.getEditText().getText().toString();
-        String user_password = password.getEditText().getText().toString();
-
-
-        if(TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_password))
-        {
-            Toast.makeText(getApplicationContext(),"Enter values", Toast.LENGTH_SHORT).show();
-            onRestart();
+        String checkspaces = "\\d{10}";
+        if (user_phone.isEmpty()) {
+            phone.setError("Enter valid phone number");
+            return null;
         }
-        else{
-
-
+//        else if (!user_phone.matches(checkspaces)) {
+//            phone.setError("Enter 10 digits");
+//            return null;
+//        }
+        else {
+            phone.setError(null);
+            phone.setErrorEnabled(false);
+            return user_phone;
         }
     }
 

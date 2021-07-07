@@ -2,6 +2,7 @@ package com.nightcafe.app.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getSupportActionBar().hide(); //hide action bar
 
         mAuth = FirebaseAuth.getInstance();
@@ -42,24 +44,12 @@ public class SignUpActivity extends AppCompatActivity {
         Button btn_signup = findViewById(R.id.signup);
         ImageView back = findViewById(R.id.arrow);
 
-    //    TextInputLayout name = findViewById(R.id.fullname);
-   //     TextInputLayout email = findViewById(R.id.email);
-        TextInputLayout  password = findViewById(R.id.password);
-        TextInputLayout phone = findViewById(R.id.phone);
-     //   String user_email = email.getEditText().getText().toString();
-        String user_password = password.getEditText().getText().toString();
-     //   String user_name = name.getEditText().getText().toString();
-        String user_phone = phone.getEditText().getText().toString();
-
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 createUser();
 
-       //     Intent intent = new Intent(SignUpActivity.this, OtpActivity.class);
-       //         startActivity(intent);
-//                finish();
             }
         });
 
@@ -81,11 +71,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         String user_name =  validateFullName();
         String user_email = validateEmail();
-        String user_password = validatePassword();
         String user_phone = validatePhoneNumber();
 
 
-        if(TextUtils.isEmpty(user_name) || TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_password) || TextUtils.isEmpty(user_phone))
+        if(TextUtils.isEmpty(user_name) || TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_phone))
         {
           Toast.makeText(getApplicationContext(),"Error", Toast.LENGTH_SHORT).show();
         }
@@ -97,7 +86,6 @@ public class SignUpActivity extends AppCompatActivity {
 
             intent.putExtra("_fullName", user_name);
             intent.putExtra("_email", user_email);
-            intent.putExtra("_password", user_password);
             intent.putExtra("_phone", user_phone);
 
                     startActivity(intent);
@@ -125,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private String validateEmail() {
         TextInputLayout email = findViewById(R.id.email);
-        String user_email = email.getEditText().getText().toString();
+        String user_email = email.getEditText().getText().toString().trim();
 
 
         String checkEmail = "[a-zA-Z0-9._-]+@[a-z]+.+[a-z]+";
@@ -143,39 +131,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private String validatePassword() {
-        TextInputLayout password = findViewById(R.id.password);
-        String user_password = password.getEditText().getText().toString();
-
-
-        String checkPassword = "^" +
-                //"(?=.*[0-9])" +         //at least 1 digit
-                //"(?=.*[a-z])" +         //at least 1 lower case letter
-                //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                "(?=.*[a-zA-Z])" +      //any letter
-                "(?=.*[@#$%^&+=])" +    //at least 1 special character
-               "(?=S+$)" +           //no white spaces
-                ".{4,}" +               //at least 4 characters
-                "$";
-
-        if (user_password.isEmpty()) {
-            password.setError("Field can not be empty");
-            return null;
-       }
-//        else if (!user_password.matches(checkPassword)) {
-//            password.setError("Password should contain 4 characters!");
-//            return null;
-//        }
-        else {
-            password.setError(null);
-            password.setErrorEnabled(false);
-            return user_password;
-        }
-    }
 
     private String validatePhoneNumber() {
         TextInputLayout phone = findViewById(R.id.phone);
-        String user_phone = phone.getEditText().getText().toString();
+        String user_phone = phone.getEditText().getText().toString().trim();
 
         String checkspaces = "\\d{10}";
         if (user_phone.isEmpty()) {
