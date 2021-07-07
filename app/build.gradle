@@ -46,4 +46,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
 
     implementation 'com.chaos.view:pinview:1.4.3'
+    implementation 'com.google.firebase:firebase-database'
 }

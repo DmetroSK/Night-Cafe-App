@@ -76,14 +76,14 @@
             android:id="@+id/signin"
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:textColor="@color/white"
             android:text="Sign In"/>
 
         <Button
             android:id="@+id/google"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:textColor="@color/white"
             android:text="Google"/>
 
@@ -98,7 +98,8 @@
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:text="You don't have an account? Sign Up"/>
 
 

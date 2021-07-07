@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
 
@@ -51,12 +53,10 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("users/name");
 
-                loginUser();
-
-                        Intent intent = new Intent(SignInActivity.this, OtpActivity.class);
-                      startActivity(intent);
-//                finish();
+                myRef.setValue("Hello, World!");
             }
         });
 

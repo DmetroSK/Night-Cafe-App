@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
 
@@ -31,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
 
-    String fullName,email,password;
+    String fullName,email,password,newPhone;
     PinView pinFromUser;
     String codeBySystem;
 
@@ -54,9 +56,9 @@ public class OtpActivity extends AppCompatActivity {
         String phone = getIntent().getStringExtra("_phone");
 
         Integer set=Integer.valueOf(phone);
-        String get = String.valueOf("+94"+set);
+         newPhone = String.valueOf("+94"+set);
 
-        sendVerificationCodeToUser(get);
+        sendVerificationCodeToUser(newPhone);
 
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +70,9 @@ public class OtpActivity extends AppCompatActivity {
                     verifyCode(code);
                 }
 
-                Intent intent = new Intent(OtpActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(OtpActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                finish();
             }
         });
 
@@ -141,14 +143,8 @@ public class OtpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(OtpActivity.this, "Verified.", Toast.LENGTH_SHORT).show();
+                            storeNewUsersData();
 
-                            //Verification completed successfully here Either
-                            // store the data or do whatever desire
-//                            if (whatToDO.equals("updateData")) {
-//                                updateOldUsersData();
-//                            } else if (whatToDO.equals("createNewUser")) {
-//                                storeNewUsersData();
-//                            }
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(OtpActivity.this, "Verification Not Completed! Try again.", Toast.LENGTH_SHORT).show();
@@ -156,5 +152,20 @@ public class OtpActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void storeNewUsersData() {
+
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference reference = rootNode.getReference("Users");
+
+        //Create helperclass reference and store data using firebase
+        User addNewUser = new User(fullName, email, password, newPhone);
+        reference.child(newPhone).setValue(addNewUser);
+
+        //We will also create a Session here in next videos to keep the user logged In
+
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 }

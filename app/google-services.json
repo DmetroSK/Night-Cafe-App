@@ -1,33 +1,42 @@
 {
   "project_info": {
-    "project_number": "571956728947",
-    "project_id": "night-cafe-316214",
-    "storage_bucket": "night-cafe-316214.appspot.com"
+    "project_number": "67986715460",
+    "firebase_url": "https://night-cafe-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "night-cafe-app",
+    "storage_bucket": "night-cafe-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:571956728947:android:6deb8df531980898cd8606",
+        "mobilesdk_app_id": "1:67986715460:android:92fca2c6fa50d524845d11",
         "android_client_info": {
           "package_name": "com.nightcafe.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "571956728947-n2klqm22j3g9nv4rc8h9p7le9dl0o388.apps.googleusercontent.com",
+          "client_id": "67986715460-dopqk8idqo29mfi1fjgbqsrdfdnhm0h0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nightcafe.app",
+            "certificate_hash": "004c02f05ab601665c02a1f64922e2afb26da9e8"
+          }
+        },
+        {
+          "client_id": "67986715460-msehcgg3gngnl5u5rv4min20aud33i3l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCiWctgY7TFRlNp11tEVtCR_kEcPmnQEws"
+          "current_key": "AIzaSyBL5dgr-16E9cWh4VpnRnlnV5YSApMDPTk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "571956728947-n2klqm22j3g9nv4rc8h9p7le9dl0o388.apps.googleusercontent.com",
+              "client_id": "67986715460-msehcgg3gngnl5u5rv4min20aud33i3l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

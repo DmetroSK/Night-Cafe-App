@@ -181,10 +181,12 @@ public class SignUpActivity extends AppCompatActivity {
         if (user_phone.isEmpty()) {
             phone.setError("Enter valid phone number");
             return null;
-        } else if (!user_phone.matches(checkspaces)) {
-            phone.setError("Enter 10 digits");
-            return null;
-        } else {
+        }
+//        else if (!user_phone.matches(checkspaces)) {
+//            phone.setError("Enter 10 digits");
+//            return null;
+//        }
+        else {
             phone.setError(null);
             phone.setErrorEnabled(false);
             return user_phone;
