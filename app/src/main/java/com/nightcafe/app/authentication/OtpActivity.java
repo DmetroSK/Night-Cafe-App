@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
@@ -33,9 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
 
-    String fullName,email,newPhone;
+    String fullName,email,newPhone,phoneNew;
     PinView pinFromUser;
     String codeBySystem;
+    static String ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,18 +49,32 @@ public class OtpActivity extends AppCompatActivity {
 
         Button btn_submit = findViewById(R.id.submit);
         ImageView back = findViewById(R.id.arrow);
+        TextView resend = findViewById(R.id.resend);
 
         pinFromUser = findViewById(R.id.pinview);
 
+        ref = getIntent().getStringExtra("_Ref");
 
-        fullName = getIntent().getStringExtra("_fullName");
-        email = getIntent().getStringExtra("_email");
-        String phone = getIntent().getStringExtra("_phone");
+        if(ref == "signup"){
+            fullName = getIntent().getStringExtra("_fullName");
+            email = getIntent().getStringExtra("_email");
 
-        Integer set=Integer.valueOf(phone);
-         newPhone = String.valueOf("+94"+set);
+            String phone = getIntent().getStringExtra("_phone");
 
-        sendVerificationCodeToUser(newPhone);
+            Integer set=Integer.valueOf(phone);
+            newPhone = String.valueOf("+94"+set);
+
+            sendVerificationCodeToUser(newPhone);
+
+        }
+        else {
+            phoneNew = getIntent().getStringExtra("_phone");
+            sendVerificationCodeToUser(phoneNew);
+        }
+
+
+
+
 
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
@@ -68,20 +84,45 @@ public class OtpActivity extends AppCompatActivity {
                 String code = pinFromUser.getText().toString();
                 if(!code.isEmpty()){
                     verifyCode(code);
+
+                }
+                else{
+                    Toast.makeText(OtpActivity.this, "Code Empty.", Toast.LENGTH_SHORT).show();
+
                 }
 
-//                Intent intent = new Intent(OtpActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
+
+            }
+        });
+
+        resend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(ref == "signup"){
+
+                    sendVerificationCodeToUser(newPhone);
+
+                }
+                else {
+
+                    sendVerificationCodeToUser(phoneNew);
+                }
             }
         });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OtpActivity.this, SignUpActivity.class);
-                startActivity(intent);
-//                finish();
+                if(ref == "signup")
+                {
+                    startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
+                }
+                else {
+                    startActivity(new Intent(OtpActivity.this, SignInActivity.class));
+                }
+
+                finish();
             }
         });
 
@@ -143,7 +184,15 @@ public class OtpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(OtpActivity.this, "Verified.", Toast.LENGTH_SHORT).show();
-                            storeNewUsersData();
+                            if(ref == "signup")
+                            {
+                                storeNewUsersData();
+                            }
+                            else {
+                                startActivity(new Intent(OtpActivity.this, MainActivity.class));
+                                finish();
+                            }
+
 
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -163,9 +212,9 @@ public class OtpActivity extends AppCompatActivity {
         User addNewUser = new User(fullName, email, newPhone);
         reference.child(newPhone).setValue(addNewUser);
 
+        startActivity(new Intent(OtpActivity.this, MainActivity.class));
+        finish();
         //We will also create a Session here in next videos to keep the user logged In
 
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();
     }
 }

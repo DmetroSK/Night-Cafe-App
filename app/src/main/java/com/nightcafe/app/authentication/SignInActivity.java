@@ -7,8 +7,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,8 +34,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.Context;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
+import com.nightcafe.app.SplashActivity;
+import com.nightcafe.app.databases.SessionManager;
+
+import java.net.NetworkInterface;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -64,8 +72,12 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                loginUser();
-
+                if(!isConnected(SignInActivity.this)){
+                    showCustomDialog();
+                }
+                else {
+                    loginUser();
+                }
             }
         });
 
@@ -93,8 +105,15 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRestart() {
+        super.onRestart();
+
+
+    }
 
     private void loginUser() {
+
 
 
         String user_phone = validatePhoneNumber();
@@ -119,14 +138,23 @@ public class SignInActivity extends AppCompatActivity {
                         phone.setError(null);
                         phone.setErrorEnabled(false);
 
-                        String data = snapshot.child(newPhone).child("email").getValue(String.class);
-                        Toast.makeText(SignInActivity.this, data, Toast.LENGTH_SHORT).show();
-                        Log.d("tag", data);
+                        String email = snapshot.child(newPhone).child("email").getValue(String.class);
+                        String name = snapshot.child(newPhone).child("fullName").getValue(String.class);
+//                        Toast.makeText(SignInActivity.this, data, Toast.LENGTH_SHORT).show();
+                       Log.d("tag--name", name);
                         probar.setVisibility(View.GONE);
-//                        Intent intent = new Intent(SignInActivity.this, OtpActivity.class);
-//                        intent.putExtra("_phone", newPhone);
-//
-//                        finish();
+
+
+                        //session create
+                        SessionManager sessionManager = new SessionManager(SignInActivity.this);
+                        sessionManager.createLoginSession(name,email,newPhone);
+
+
+                        Intent intent = new Intent(SignInActivity.this, OtpActivity.class);
+                        intent.putExtra("_phone", newPhone);
+                        intent.putExtra("_Ref", "signin");
+                        startActivity(intent);
+                        finish();
 
                     } else {
                         probar.setVisibility(View.GONE);
@@ -143,6 +171,43 @@ public class SignInActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void showCustomDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+        builder.setMessage("Please Connect to the Internet")
+                .setCancelable(false)
+                .setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onRestart();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean isConnected(SignInActivity signInActivity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) signInActivity.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+if((wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected()))
+        {
+            return true;
+        }
+        else
+            {
+                return false;
+            }
+
     }
 
     private String validatePhoneNumber() {
@@ -164,6 +229,8 @@ public class SignInActivity extends AppCompatActivity {
             return user_phone;
         }
     }
+
+
 
     public void onBackPressed() {
 

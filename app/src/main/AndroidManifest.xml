@@ -3,6 +3,7 @@
     package="com.nightcafe.app">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NightCafe">
-        <activity android:name=".authentication.ForgotPasswordActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".authentication.ForgotPasswordActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.ResetPasswordActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.OtpActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.SignUpActivity" android:screenOrientation="portrait"/>
