@@ -45,7 +45,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phone"
+            android:id="@+id/newphone"
             android:layout_below="@id/logo_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             app:startIconDrawable="@drawable/ic_outline_phone"
             app:endIconMode="clear_text"
             app:endIconTint="@color/black"
-            android:hint="Phone Number">
+            android:hint="New Phone Number">
 
             <com.google.android.material.textfield.TextInputEditText
 
@@ -74,6 +74,14 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="Done"/>
+
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progressbar"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"/>-->
 
 
     </LinearLayout>

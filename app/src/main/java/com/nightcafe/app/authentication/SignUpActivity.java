@@ -74,7 +74,9 @@ public class SignUpActivity extends AppCompatActivity {
         String user_phone = validatePhoneNumber();
 
 
-        if(TextUtils.isEmpty(user_name) || TextUtils.isEmpty(user_email) || TextUtils.isEmpty(user_phone))
+
+
+        if(TextUtils.isEmpty(user_name) && TextUtils.isEmpty(user_email) && TextUtils.isEmpty(user_phone))
         {
           Toast.makeText(getApplicationContext(),"Error", Toast.LENGTH_SHORT).show();
         }
@@ -88,6 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
             intent.putExtra("_email", user_email);
             intent.putExtra("_phone", user_phone);
             intent.putExtra("_Ref", "signup");
+            Log.d("tag-sign-phone2", user_phone );
 
                     startActivity(intent);
                     finish();

@@ -92,6 +92,8 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public void onRestart() {
         super.onRestart();
@@ -219,7 +221,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
     public void onBackPressed() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);

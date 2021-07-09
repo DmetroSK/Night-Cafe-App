@@ -52,9 +52,7 @@ public class ChangedPhoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkUser();
-    //            Intent intent = new Intent(ChangedPhoneActivity.this, UpdatePhoneActivity.class);
-   //             startActivity(intent);
-//                finish();
+
             }
         });
 
@@ -100,6 +98,7 @@ public class ChangedPhoneActivity extends AppCompatActivity {
                             probar.setVisibility(View.GONE);
                             Log.d("tag--name", retrieve_email +retrieve_phone );
                             Intent intent = new Intent(ChangedPhoneActivity.this, UpdatePhoneActivity.class);
+                            intent.putExtra("_oldPhone", newPhone);
                             startActivity(intent);
                             finish();
 

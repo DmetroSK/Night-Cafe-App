@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nightcafe.app">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,11 +12,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NightCafe">
-        <activity android:name=".authentication.ChangedPhoneActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".authentication.UpdatePhoneActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".authentication.OtpActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".authentication.SignUpActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".authentication.SignInActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".UpdateSuccessActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".authentication.ChangedPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authentication.UpdatePhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authentication.OtpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authentication.SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".authentication.SignInActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
@@ -26,7 +38,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

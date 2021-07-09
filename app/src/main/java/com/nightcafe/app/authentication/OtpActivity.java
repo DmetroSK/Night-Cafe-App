@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,22 +24,25 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
+import com.nightcafe.app.SplashActivity;
 import com.nightcafe.app.databases.SessionManager;
 
 import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
 
-    String fullName,email,newPhone,phoneNew;
+    String fullName,email,newPhoneS,phoneNewU,oldPhone,phoneNew;
     PinView pinFromUser;
     String codeBySystem;
     static String ref;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +59,38 @@ public class OtpActivity extends AppCompatActivity {
         pinFromUser = findViewById(R.id.pinview);
 
         ref = getIntent().getStringExtra("_Ref");
+        Log.d("tag-otp-ref", ref );
 
-        if(ref == "signup"){
+        if(ref.equals("signup")){
             fullName = getIntent().getStringExtra("_fullName");
             email = getIntent().getStringExtra("_email");
 
-            String phone = getIntent().getStringExtra("_phone");
+            String phone1 = getIntent().getStringExtra("_phone");
 
-            Integer set=Integer.valueOf(phone);
-            newPhone = String.valueOf("+94"+set);
-
-            sendVerificationCodeToUser(newPhone);
+            Integer set1 = Integer.valueOf(phone1);
+            newPhoneS = String.valueOf("+94"+set1);
+            Log.d("tag-otp-sign-phone", newPhoneS );
+            sendVerificationCodeToUser(newPhoneS);
 
         }
+
+        else if(ref.equals("update_Phone"))
+        {
+            String phone2 = getIntent().getStringExtra("_n_phone");
+            Log.d("tag-otp-new-con-phone2", phone2 );
+            Integer set2=Integer.valueOf(phone2);
+            phoneNewU = String.valueOf("+94"+set2);
+
+            oldPhone = getIntent().getStringExtra("_old_phone");
+            Log.d("tag-otp-old-phone", oldPhone );
+            Log.d("tag-otp-new-phone", phoneNewU );
+            sendVerificationCodeToUser(phoneNewU);
+        }
+
         else {
             phoneNew = getIntent().getStringExtra("_phone");
             sendVerificationCodeToUser(phoneNew);
         }
-
-
-
 
 
 
@@ -88,6 +104,7 @@ public class OtpActivity extends AppCompatActivity {
 
                 }
                 else{
+                    onRestart();
                     Toast.makeText(OtpActivity.this, "Code Empty.", Toast.LENGTH_SHORT).show();
 
                 }
@@ -100,9 +117,14 @@ public class OtpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(ref == "signup"){
+                if(ref.equals("signup")){
 
-                    sendVerificationCodeToUser(newPhone);
+                    sendVerificationCodeToUser(newPhoneS);
+
+                }
+               else if(ref.equals("update_Phone")){
+
+                    sendVerificationCodeToUser(phoneNewU);
 
                 }
                 else {
@@ -115,9 +137,13 @@ public class OtpActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ref == "signup")
+                if(ref.equals("signup"))
                 {
                     startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
+                }
+                else if(ref.equals("update_Phone"))
+                {
+                    startActivity(new Intent(OtpActivity.this, UpdatePhoneActivity.class));
                 }
                 else {
                     startActivity(new Intent(OtpActivity.this, SignInActivity.class));
@@ -137,6 +163,13 @@ public class OtpActivity extends AppCompatActivity {
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,// Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
+
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+
 
     }
 
@@ -170,14 +203,43 @@ public class OtpActivity extends AppCompatActivity {
                 }
             };
 
+    private void updatePhone(String otp){
+        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential( oldPhone, otp );
+            // Update Mobile Number...
+        firebaseAuth.getCurrentUser().updatePhoneNumber(phoneAuthCredential)
+                .addOnCompleteListener(new OnCompleteListener <Void>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task <Void> task) {
+                                               if (task.isSuccessful()) {
+                                                   // Update Successfully
+                                                   Intent intent = new Intent(OtpActivity.this, SignInActivity.class);
+                                                     startActivity(intent);
+                                                    finish();
+                                               } else {
+                                                   Toast.makeText(OtpActivity.this, "Update Failed", Toast.LENGTH_SHORT).show();
+                                               }
+                                           }
+                                       }
+                );
+    }
+
     private void verifyCode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeBySystem, code);
-        signInWithPhoneAuthCredential(credential);
+        if(ref.equals("update_Phone"))
+        {
+           // updatePhone(code);
+           updateUsersData();
+        }
+
+        else{
+            signInWithPhoneAuthCredential(credential);
+        }
+
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+         firebaseAuth = FirebaseAuth.getInstance();
 
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -185,12 +247,16 @@ public class OtpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(OtpActivity.this, "Verified.", Toast.LENGTH_SHORT).show();
-                            if(ref == "signup")
+                            Log.d("tag-otp-dt-data-bef-ref", ref );
+
+                            if(ref.equals("signup"))
                             {
+
                                 storeNewUsersData();
+                             //   Log.d("tag-otp-dt-data-pass", user.toString() );
                                 //session create
                                 SessionManager sessionManager = new SessionManager(OtpActivity.this);
-                                sessionManager.createLoginSession(fullName,email,newPhone);
+                                sessionManager.createLoginSession(fullName,email,newPhoneS);
                             }
                             else {
                                 startActivity(new Intent(OtpActivity.this, MainActivity.class));
@@ -213,12 +279,51 @@ public class OtpActivity extends AppCompatActivity {
         DatabaseReference reference = rootNode.getReference("Users");
 
         //Create helperclass reference and store data using firebase
-        User addNewUser = new User(fullName, email, newPhone);
-        reference.child(newPhone).setValue(addNewUser);
 
+
+        User addNewUser = new User(fullName, email, newPhoneS);
+        Log.d("tag-otp-st-u-data", fullName+email+newPhoneS );
+        reference.child(addNewUser.getPhone()).setValue(addNewUser);
+        Log.d("tag-otp-st-new-user", "passed" );
         startActivity(new Intent(OtpActivity.this, MainActivity.class));
         finish();
         //We will also create a Session here in next videos to keep the user logged In
 
     }
+
+    private void updateUsersData() {
+
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference reference = rootNode.getReference("Users");
+
+
+        reference.child(oldPhone).get().addOnSuccessListener(dataSnapshot -> {
+            reference.child(phoneNewU).setValue(dataSnapshot.getValue());
+            reference.child(oldPhone).removeValue();
+        });
+
+        SessionManager sessionManager = new SessionManager(this);
+        Handler h = new Handler();
+        h.postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                reference.child(phoneNewU).child("phone").setValue(phoneNewU);
+
+                sessionManager.logout();
+                startActivity(new Intent(OtpActivity.this, MainActivity.class));
+                finish();
+
+            }
+        },2000);
+
+
+
+
+//        reference.child("phone").setValue(phoneNewU);
+
+        //We will also create a Session here in next videos to keep the user logged In
+
+    }
+
+
 }
