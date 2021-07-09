@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".authentication.ForgotPasswordActivity">
+    tools:context=".authentication.UpdatePhoneActivity">
 
     <ImageView
         android:id="@+id/arrow"
@@ -23,7 +23,7 @@
         android:textStyle="bold"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:text="Forgot Password"/>
+        android:text="Update Phone Number"/>
 
     <TextView
         android:id="@+id/subtitle"
@@ -33,7 +33,7 @@
         android:textSize="15sp"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:text="Please enter your email so we can help you"/>
+        android:text="Enter your new phone number"/>
 
 
     <LinearLayout
@@ -45,28 +45,35 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email"
-            android:layout_marginBottom="10dp"
+            android:id="@+id/phone"
+            android:layout_below="@id/logo_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email">
+            app:startIconDrawable="@drawable/ic_outline_phone"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            android:hint="Phone Number">
 
             <com.google.android.material.textfield.TextInputEditText
 
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:maxLength="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
+
+
         <Button
-            android:id="@+id/next"
+            android:id="@+id/done"
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Next"/>
+            android:text="Done"/>
 
 
     </LinearLayout>

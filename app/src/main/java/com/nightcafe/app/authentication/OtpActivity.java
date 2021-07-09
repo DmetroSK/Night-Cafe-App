@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.MainActivity;
 import com.nightcafe.app.R;
+import com.nightcafe.app.databases.SessionManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -187,6 +188,9 @@ public class OtpActivity extends AppCompatActivity {
                             if(ref == "signup")
                             {
                                 storeNewUsersData();
+                                //session create
+                                SessionManager sessionManager = new SessionManager(OtpActivity.this);
+                                sessionManager.createLoginSession(fullName,email,newPhone);
                             }
                             else {
                                 startActivity(new Intent(OtpActivity.this, MainActivity.class));

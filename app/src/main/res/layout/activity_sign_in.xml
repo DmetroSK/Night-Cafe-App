@@ -39,6 +39,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_outline_phone"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
             android:hint="Phone Number">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,7 +65,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textAlignment="viewEnd"
-            android:text="Changed Phone Number?"/>
+            android:text="Can't Sign IN ?"/>
 
         <Button
             android:id="@+id/signin"

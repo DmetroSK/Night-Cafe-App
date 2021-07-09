@@ -12,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NightCafe">
-        <activity android:name=".authentication.ForgotPasswordActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".authentication.ResetPasswordActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".authentication.ChangedPhoneActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".authentication.UpdatePhoneActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.OtpActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.SignUpActivity" android:screenOrientation="portrait"/>
         <activity android:name=".authentication.SignInActivity" android:screenOrientation="portrait"/>

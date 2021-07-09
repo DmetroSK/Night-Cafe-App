@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.nightcafe.app.authentication.SignInActivity;
+import com.nightcafe.app.databases.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -23,9 +24,22 @@ public class SplashActivity extends AppCompatActivity {
         h.postDelayed(new Runnable(){
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, SignInActivity.class);
-                startActivity(intent);
-                finish();
+
+                SessionManager sessionManager = new SessionManager(SplashActivity.this);
+
+
+                if(sessionManager.checkLogin() == true)
+                {
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                }
+                else{
+                    startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                    finish();
+                }
+
+
+
             }
         },4000);
     }
