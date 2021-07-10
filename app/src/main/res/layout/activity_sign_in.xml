@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".authentication.SignInActivity">
 
     <ImageView
@@ -14,7 +13,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="100dp"
-        android:layout_gravity="center"
         android:src="@drawable/ic_main_logo_black"/>
     <TextView
         android:id="@+id/logo_text"
@@ -52,7 +50,6 @@
                 android:maxLength="10"/>
 
         </com.google.android.material.textfield.TextInputLayout>
-
 
 
 
@@ -120,7 +117,6 @@
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>

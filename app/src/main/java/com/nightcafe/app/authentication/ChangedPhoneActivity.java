@@ -3,59 +3,55 @@ package com.nightcafe.app.authentication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
-import com.nightcafe.app.databases.SessionManager;
 
 public class ChangedPhoneActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
     ProgressBar probar;
-    TextInputLayout phone,email;
-    String newPhone,newEmail;
+    String state;
+    String oldPhone,oldEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_changed_phone);
 
+        // Force Night mode enabled and Hide action bar
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().hide(); //hide action bar
+        getSupportActionBar().hide();
 
+        //Elements define
         Button btn_next = findViewById(R.id.next);
         ImageView back = findViewById(R.id.arrow);
-
         probar = findViewById(R.id.progressbar);
+
+        //on start progress bar invisible
         probar.setVisibility(View.GONE);
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-
+        //next button press
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkUser();
+                changePhoneNumber();
 
             }
         });
 
+        //back button press
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,53 +62,127 @@ public class ChangedPhoneActivity extends AppCompatActivity {
 
     }
 
-    private void checkUser() {
+    //change phone number data retrieve and pass
+    private void changePhoneNumber() {
 
+        //validation and get data to variables
         String user_phone = validatePhoneNumber();
-         newEmail = validateEmail();
+        oldEmail = validateEmail();
 
-        Integer set=Integer.valueOf(user_phone);
-        newPhone = String.valueOf("+94"+set);
-        Log.d("tag-2", newPhone);
-        Log.d("tag-2", newEmail);
+
+        if (TextUtils.isEmpty(user_phone) && TextUtils.isEmpty(oldEmail)) {
+            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            try {
+                //check user already exists passing validated phone number
+                checkUser(user_phone);
+            }
+
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            //filter state
+            if(state == "true") {
+
+                //progress bar visible during check
+                probar.setVisibility(View.VISIBLE);
+
+                try {
+                    Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(oldPhone);
+
+                    checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+
+                                //get data from firebase database
+                                String retrieve_email = snapshot.child(oldPhone).child("email").getValue(String.class);
+                                String retrieve_phone = snapshot.child(oldPhone).child("phone").getValue(String.class);
+
+
+                                if( oldPhone.equals(retrieve_phone) && oldEmail.equals(retrieve_email))
+                                {
+                                    probar.setVisibility(View.GONE);
+                                    Intent intent = new Intent(ChangedPhoneActivity.this, UpdatePhoneActivity.class);
+
+                                    //send data to UpdatePhoneActivity
+                                    intent.putExtra("_oldPhone", oldPhone);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                                else {
+                                    probar.setVisibility(View.GONE);
+                                    Toast.makeText(getApplicationContext(), "Details not matched", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else {
+                                probar.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "No such user exit", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            probar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), "Database Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+            else{
+               return;// Toast.makeText(getApplicationContext(), "User already not exit", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+
+    }
+
+    //check user already excists
+    private void checkUser(String phone) {
+
+        //phone number first 0 remove and add +94
+        Integer set=Integer.valueOf(phone);
+        oldPhone = String.valueOf("+94"+set);
+
+
         probar.setVisibility(View.VISIBLE);
 
-        if (TextUtils.isEmpty(newPhone) || TextUtils.isEmpty(newEmail)) {
+        if (TextUtils.isEmpty(oldPhone)) {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
         }
 
         else {
-            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(newPhone);
+            //firebase query for match phone number
+            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(oldPhone);
 
             checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-
-                        String retrieve_email = snapshot.child(newPhone).child("email").getValue(String.class);
-                        String retrieve_phone = snapshot.child(newPhone).child("phone").getValue(String.class);
-
-
-                         if( newPhone.equals(retrieve_phone) && newEmail.equals(retrieve_email))
-                        {
-                            probar.setVisibility(View.GONE);
-                            Log.d("tag--name", retrieve_email +retrieve_phone );
-                            Intent intent = new Intent(ChangedPhoneActivity.this, UpdatePhoneActivity.class);
-                            intent.putExtra("_oldPhone", newPhone);
-                            startActivity(intent);
-                            finish();
-
-                        }
-                        else {
-                            probar.setVisibility(View.GONE);
-                             Toast.makeText(getApplicationContext(), "Details not matched", Toast.LENGTH_SHORT).show();
-                        }
-
+                        probar.setVisibility(View.GONE);
+                        state = "true"; //set state for filter user already exists
 
                     } else {
                         probar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "No such user exit", Toast.LENGTH_SHORT).show();
-
+                        state = "false";//set state for filter user already not exists
                     }
                 }
 
@@ -129,7 +199,7 @@ public class ChangedPhoneActivity extends AppCompatActivity {
     }
 
     private String validateEmail() {
-         email = findViewById(R.id.email);
+        TextInputLayout email = findViewById(R.id.email);
         String user_email = email.getEditText().getText().toString().trim();
 
 
@@ -155,13 +225,13 @@ public class ChangedPhoneActivity extends AppCompatActivity {
 
         String checkspaces = "\\d{10}";
         if (user_phone.isEmpty()) {
-            phone.setError("Enter valid phone number");
+            phone.setError("Field can not be empty");
             return null;
         }
-//        else if (!user_phone.matches(checkspaces)) {
-//            phone.setError("Enter 10 digits");
-//            return null;
-//        }
+        else if (!user_phone.matches(checkspaces)) {
+            phone.setError("Enter 10 digits");
+            return null;
+        }
         else {
             phone.setError(null);
             phone.setErrorEnabled(false);

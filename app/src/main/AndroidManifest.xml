@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NightCafe">
-        <activity android:name=".UpdateSuccessActivity"
+        <activity android:name=".authentication.UpdateSuccessActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".authentication.ChangedPhoneActivity"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".authentication.UpdatePhoneActivity">
 
     <ImageView
@@ -17,73 +16,65 @@
 
     <TextView
         android:id="@+id/title"
+        android:layout_below="@id/arrow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:layout_gravity="center"
         android:textAlignment="center"
         android:text="Update Phone Number"/>
 
     <TextView
         android:id="@+id/subtitle"
-        android:layout_marginTop="5dp"
+        android:layout_below="@id/title"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:layout_gravity="center"
         android:textAlignment="center"
         android:text="Enter your new phone number"/>
 
-
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newphone"
+        android:layout_below="@id/title"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:orientation="vertical">
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        app:startIconDrawable="@drawable/ic_outline_phone"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/black"
+        android:hint="New Phone Number">
 
+        <com.google.android.material.textfield.TextInputEditText
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/newphone"
-            android:layout_below="@id/logo_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/ic_outline_phone"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            android:hint="New Phone Number">
+            android:inputType="phone"
+            android:maxLength="10"/>
 
-            <com.google.android.material.textfield.TextInputEditText
+    </com.google.android.material.textfield.TextInputLayout>
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="10"/>
+    <Button
+        android:id="@+id/done"
+        android:layout_below="@id/newphone"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textColor="@color/white"
+        android:text="Done"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/done"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-
-
-
-        <Button
-            android:id="@+id/done"
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="Done"/>
-
-<!--        <ProgressBar-->
-<!--            android:id="@+id/progressbar"-->
-<!--            android:layout_marginTop="40dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"/>-->
-
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -3,104 +3,159 @@ package com.nightcafe.app.authentication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.nightcafe.app.MainActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
 
-import java.util.concurrent.TimeUnit;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
+    ProgressBar probar;
+    String state;
+    String newPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        // Force Night mode enabled and Hide action bar
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().hide(); //hide action bar
+        getSupportActionBar().hide();
 
-        mAuth = FirebaseAuth.getInstance();
-
+        //Elements define
         Button btn_signup = findViewById(R.id.signup);
         ImageView back = findViewById(R.id.arrow);
+        probar = findViewById(R.id.progressbar);
 
+        //on start progress bar invisible
+        probar.setVisibility(View.GONE);
+
+        //Sign up button press
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 createUser();
-
             }
         });
 
+        //back button press
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                finish();
-
             }
         });
-
 
     }
 
 
+    //create user
     private void createUser(){
 
-        String user_name =  validateFullName();
+        //validation and get data to variables
+        String user_name =  validateName();
         String user_email = validateEmail();
         String user_phone = validatePhoneNumber();
 
 
+            if (TextUtils.isEmpty(user_name) && TextUtils.isEmpty(user_email) && TextUtils.isEmpty(user_phone))
+                {
+                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                 }
+            else
+                {
+                    try {
+                        //check user already exists passing validated phone number
+                        checkUser(user_phone);
+                    }
 
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
-        if(TextUtils.isEmpty(user_name) && TextUtils.isEmpty(user_email) && TextUtils.isEmpty(user_phone))
-        {
-          Toast.makeText(getApplicationContext(),"Error", Toast.LENGTH_SHORT).show();
+                    //filter state
+                    if(state == "false") {
+                        Intent intent = new Intent(SignUpActivity.this, OtpActivity.class);
+
+                        //send data to OTP activity
+                        intent.putExtra("_name", user_name);
+                        intent.putExtra("_email", user_email);
+                        intent.putExtra("_phone", newPhone);
+                        //reference from sign up
+                        intent.putExtra("_Ref", "signup");
+
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                     return; //   Toast.makeText(getApplicationContext(), "User already exit", Toast.LENGTH_SHORT).show();
+                    }
+
+                 }
+
+    }
+
+    //check user already excists
+    private void checkUser(String phone) {
+
+        //phone number first 0 remove and add +94
+        Integer set= Integer.parseInt(phone);
+        newPhone = String.valueOf("+94"+set);
+
+        //progress bar visible during check
+        probar.setVisibility(View.VISIBLE);
+
+        //check phone number is empty
+        if (TextUtils.isEmpty(newPhone)) {
+            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
         }
-        else{
 
+        else {
+            //firebase query for match phone number
+            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(newPhone);
 
-            Intent intent = new Intent(SignUpActivity.this, OtpActivity.class);
+            checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        probar.setVisibility(View.GONE);
+                        state = "true"; //set state for filter user already exists
 
+                    } else {
+                        probar.setVisibility(View.GONE);
+                        state = "false";//set state for filter user already not exists
+                    }
+                }
 
-            intent.putExtra("_fullName", user_name);
-            intent.putExtra("_email", user_email);
-            intent.putExtra("_phone", user_phone);
-            intent.putExtra("_Ref", "signup");
-            Log.d("tag-sign-phone2", user_phone );
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    probar.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "Database Error", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                    startActivity(intent);
-                    finish();
         }
+
     }
 
 
 
-
-    private String validateFullName() {
+    private String validateName() {
         TextInputLayout name = findViewById(R.id.fullname);
         String user_name = name.getEditText().getText().toString();
 
@@ -118,7 +173,6 @@ public class SignUpActivity extends AppCompatActivity {
     private String validateEmail() {
         TextInputLayout email = findViewById(R.id.email);
         String user_email = email.getEditText().getText().toString().trim();
-
 
         String checkEmail = "[a-zA-Z0-9._-]+@[a-z]+.+[a-z]+";
 
@@ -142,13 +196,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         String checkspaces = "\\d{10}";
         if (user_phone.isEmpty()) {
-            phone.setError("Enter valid phone number");
+            phone.setError("Field can not be empty");
             return null;
         }
-//        else if (!user_phone.matches(checkspaces)) {
-//            phone.setError("Enter 10 digits");
-//            return null;
-//        }
+        else if (!user_phone.matches(checkspaces)) {
+            phone.setError("Enter 10 digits");
+            return null;
+        }
         else {
             phone.setError(null);
             phone.setErrorEnabled(false);
