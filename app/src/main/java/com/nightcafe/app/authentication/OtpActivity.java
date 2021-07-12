@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,7 +66,6 @@ public class OtpActivity extends AppCompatActivity {
             fullName = getIntent().getStringExtra("_name");
             email = getIntent().getStringExtra("_email");
             phone_signup = getIntent().getStringExtra("_phone");
-
             sendVerificationCodeToUser(phone_signup);
 
         }
@@ -138,20 +136,22 @@ public class OtpActivity extends AppCompatActivity {
                 if(ref.equals("signup"))
                 {
                     startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
+                    finish();
                 }
                 else if(ref.equals("update_Phone"))
                 {
                     startActivity(new Intent(OtpActivity.this, UpdatePhoneActivity.class));
+                    finish();
                 }
                 else if(ref.equals("signin"))
                 {
                     startActivity(new Intent(OtpActivity.this, SignInActivity.class));
+                    finish();
                 }
                 else {
                     return;
                 }
 
-                finish();
             }
         });
 
@@ -191,12 +191,6 @@ public class OtpActivity extends AppCompatActivity {
                 mCallbacks);        // OnVerificationStateChangedCallbacks
     }
 
-    //refresh activity
-    @Override
-    public void onRestart() {
-        super.onRestart();
-
-    }
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks =
             new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

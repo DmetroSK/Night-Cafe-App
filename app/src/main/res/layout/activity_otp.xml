@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:layout_marginLeft="35dp"
-        android:text="Didn't recive OTP code?"/>
+        android:text="Didn't receive OTP code?"/>
 
     <TextView
         android:id="@+id/resend"

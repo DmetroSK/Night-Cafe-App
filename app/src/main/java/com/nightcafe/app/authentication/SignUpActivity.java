@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,8 +24,7 @@ import com.nightcafe.app.R;
 public class SignUpActivity extends AppCompatActivity {
 
     ProgressBar probar;
-    String state;
-    String newPhone;
+    String user_phone,user_name,user_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,19 @@ public class SignUpActivity extends AppCompatActivity {
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createUser();
+
+                //validation and get data to variables
+                 user_name =  validateName();
+                 user_email = validateEmail();
+                String phone = validatePhoneNumber();
+
+                try {
+                    //check user already exists passing validated phone number
+                    checkUser(phone);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -66,47 +78,18 @@ public class SignUpActivity extends AppCompatActivity {
     //create user
     private void createUser(){
 
-        //validation and get data to variables
-        String user_name =  validateName();
-        String user_email = validateEmail();
-        String user_phone = validatePhoneNumber();
-
-
-            if (TextUtils.isEmpty(user_name) && TextUtils.isEmpty(user_email) && TextUtils.isEmpty(user_phone))
-                {
-                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                 }
-            else
-                {
-                    try {
-                        //check user already exists passing validated phone number
-                        checkUser(user_phone);
-                    }
-
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    //filter state
-                    if(state == "false") {
                         Intent intent = new Intent(SignUpActivity.this, OtpActivity.class);
 
                         //send data to OTP activity
                         intent.putExtra("_name", user_name);
                         intent.putExtra("_email", user_email);
-                        intent.putExtra("_phone", newPhone);
+                        intent.putExtra("_phone", user_phone);
                         //reference from sign up
                         intent.putExtra("_Ref", "signup");
-
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                         finish();
-                    }
-                    else{
-                     return; //   Toast.makeText(getApplicationContext(), "User already exit", Toast.LENGTH_SHORT).show();
-                    }
 
-                 }
 
     }
 
@@ -115,30 +98,30 @@ public class SignUpActivity extends AppCompatActivity {
 
         //phone number first 0 remove and add +94
         Integer set= Integer.parseInt(phone);
-        newPhone = String.valueOf("+94"+set);
+        user_phone = String.valueOf("+94"+set);
 
         //progress bar visible during check
         probar.setVisibility(View.VISIBLE);
 
         //check phone number is empty
-        if (TextUtils.isEmpty(newPhone)) {
+        if (TextUtils.isEmpty(user_phone)) {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
         }
 
         else {
             //firebase query for match phone number
-            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(newPhone);
+            Query checkuser = FirebaseDatabase.getInstance().getReference("Users").orderByChild("phone").equalTo(user_phone);
 
             checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         probar.setVisibility(View.GONE);
-                        state = "true"; //set state for filter user already exists
+                        Toast.makeText(getApplicationContext(), "User already exit", Toast.LENGTH_SHORT).show();
 
                     } else {
                         probar.setVisibility(View.GONE);
-                        state = "false";//set state for filter user already not exists
+                        createUser();
                     }
                 }
 

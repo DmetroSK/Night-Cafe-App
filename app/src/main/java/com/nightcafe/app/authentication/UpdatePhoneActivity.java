@@ -22,7 +22,6 @@ import com.nightcafe.app.R;
 public class UpdatePhoneActivity extends AppCompatActivity {
 
     ProgressBar probar;
-    String state;
     String old_phone,newPhone;
 
     @Override
@@ -49,7 +48,17 @@ public class UpdatePhoneActivity extends AppCompatActivity {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatePhone();
+
+                //validation and get data to variables
+                String user_new_phone = validatePhoneNumber();
+
+                try {
+                    //check user already exists passing validated phone number
+                    checkUser(user_new_phone);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -66,27 +75,6 @@ public class UpdatePhoneActivity extends AppCompatActivity {
 
     private void updatePhone() {
 
-        //validation and get data to variables
-        String user_new_phone = validatePhoneNumber();
-
-
-            if (TextUtils.isEmpty(user_new_phone)) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-            }
-            else {
-
-                try {
-                    //check user already exists passing validated phone number
-                    checkUser(user_new_phone);
-                }
-
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                if(state == "false")
-                {
                     //progress bar visible during check
                     probar.setVisibility(View.VISIBLE);
 
@@ -98,17 +86,11 @@ public class UpdatePhoneActivity extends AppCompatActivity {
 
                     //reference from UpdatePhoneActivity
                     intent.putExtra("_Ref", "update_Phone");
+                    Toast.makeText(getApplicationContext(), "OTP code Send", Toast.LENGTH_SHORT).show();
 
                     startActivity(intent);
                     finish();
 
-                }
-
-                else{
-                    Toast.makeText(getApplicationContext(), "User already exit", Toast.LENGTH_SHORT).show();
-                }
-
-            }
 
     }
 
@@ -116,6 +98,7 @@ public class UpdatePhoneActivity extends AppCompatActivity {
 
         Integer set=Integer.valueOf(phone);
         newPhone = String.valueOf("+94"+set);
+
         probar.setVisibility(View.VISIBLE);
 
         if (TextUtils.isEmpty(newPhone)) {
@@ -130,12 +113,11 @@ public class UpdatePhoneActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         probar.setVisibility(View.GONE);
-                        state = "true";
+                        Toast.makeText(getApplicationContext(), "Number already exists", Toast.LENGTH_SHORT).show();
 
                     } else {
                         probar.setVisibility(View.GONE);
-
-                        state = "false";
+                        updatePhone();
                     }
                 }
 

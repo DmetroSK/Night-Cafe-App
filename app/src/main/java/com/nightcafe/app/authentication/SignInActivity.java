@@ -30,7 +30,7 @@ public class SignInActivity extends AppCompatActivity {
 
     ProgressBar probar;
     TextInputLayout phone;
-    String Phone,state;
+    String Phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,68 +50,60 @@ public class SignInActivity extends AppCompatActivity {
         //on start progress bar invisible
         probar.setVisibility(View.GONE);
 
-        //Sign in button press
-        btn_signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //check internet connection
-                if(!isConnected(SignInActivity.this)){
-                    showCustomDialog();
+
+        //check internet connection
+        if(!isConnected(SignInActivity.this)){
+            showCustomDialog();
+        }
+
+        else {
+            //Sign in button press
+            btn_signin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //validation and get data to variables
+                    String user_phone = validatePhoneNumber();
+
+                    try {
+                        //check user already exists passing validated phone number
+                        checkUser(user_phone);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
-                else {
-                    signInUser();
+            });
+
+            //change number button press
+            btn_changeNum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    startActivity(new Intent(SignInActivity.this, ChangedPhoneActivity.class));
+                    finish();
+
                 }
-            }
-        });
+            });
 
-        //change number button press
-        btn_changeNum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            //Sign up button press
+            btn_signup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                startActivity(new Intent(SignInActivity.this, ChangedPhoneActivity.class));
-                finish();
+                    startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+                    finish();
 
-            }
-        });
+                }
+            });
 
-        //Sign up button press
-        btn_signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
-                finish();
-
-            }
-        });
+        }
 
     }
 
     //sign in user
     private void signInUser() {
 
-        //validation and get data to variables
-        String user_phone = validatePhoneNumber();
-
-
-        if (TextUtils.isEmpty(user_phone)) {
-            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-        }
-        else {
-
-            try {
-                //check user already exists passing validated phone number
-                checkUser(user_phone);
-            }
-
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            //filter state
-            if(state == "true") {
 
                 //progress bar visible during check
                 probar.setVisibility(View.VISIBLE);
@@ -141,6 +133,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                 //reference from sign in
                                 intent.putExtra("_Ref", "signin");
+                                Toast.makeText(getApplicationContext(), "OTP code Send", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                                 finish();
 
@@ -166,13 +159,8 @@ public class SignInActivity extends AppCompatActivity {
                 }
 
 
-            }
-            else{
-              return;//  Toast.makeText(getApplicationContext(), "User already not exit", Toast.LENGTH_SHORT).show();
-            }
 
 
-        }
     }
 
     //check user already excists
@@ -199,11 +187,11 @@ public class SignInActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         probar.setVisibility(View.GONE);
-                        state = "true"; //set state for filter user already exists
+                        signInUser();
 
                     } else {
                         probar.setVisibility(View.GONE);
-                        state = "false";//set state for filter user already not exists
+                        Toast.makeText(getApplicationContext(), "Sorry user not exists", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -289,7 +277,7 @@ public class SignInActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
+                        finishAffinity();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -28,7 +28,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".authentication.SignInActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
