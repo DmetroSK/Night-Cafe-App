@@ -1,7 +1,9 @@
 package com.nightcafe.app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,10 +12,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.nightcafe.app.authentication.SignInActivity;
@@ -24,6 +28,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    BottomNavigationView bottomNavigationView;
     FirebaseAuth mAuth;
 
     @Override
@@ -37,16 +42,34 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        Button logout = findViewById(R.id.logout);
-        TextView txtname = findViewById(R.id.txtname);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame,new HomeFragment()).commit();
 
         //session
         SessionManager sessionManager = new SessionManager(this);
-        HashMap <String,String> userDetails = sessionManager.getUserDetailFromSession();
+        HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
 
-        String name = userDetails.get(SessionManager.KEY_NAME);
 
-        txtname.setText("Hi " + name);
+        bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_nav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment temp = null;
+
+                switch (item.getItemId())
+                {
+                    case R.id.menu_home:temp = new HomeFragment();
+                        break;
+                    case R.id.orders_home:temp = new OrdersFragment();
+                        break;
+                    case R.id.tracking_home:temp = new TrackingFragment();
+                        break;
+                    case R.id.profile_home:temp = new ProfileFragment();
+                        break;
+                }
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame,temp).commit();
+                return true;
+            }
+        });
 
         //check internet connection
         if(!isConnected(MainActivity.this)){
@@ -54,16 +77,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
 
-            logout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+//            code
 
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                    finish();
-                    sessionManager.logout();
-                }
-            });
         }
 
 

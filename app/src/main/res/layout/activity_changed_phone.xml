@@ -22,7 +22,7 @@
         android:textSize="25sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:text="Changed Your Number "/>
+        android:text="Changed Your Number"/>
 
     <TextView
         android:id="@+id/subtitle"
