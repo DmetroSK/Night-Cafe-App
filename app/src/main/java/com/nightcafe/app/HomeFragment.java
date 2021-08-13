@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,33 +33,39 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home,container, false);
 
+        //set recycle view
         RecyclerView recyclerView =(RecyclerView)view.findViewById(R.id.fooditemrv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //firebase query
         FirebaseRecyclerOptions<ItemModel> options =
                 new FirebaseRecyclerOptions.Builder<ItemModel>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("Items").orderByChild("status").equalTo("Available"), ItemModel.class)
                         .build();
 
-         foodItemAdapter = new FoodItemAdapter(options);
+        //set data adapter
+        foodItemAdapter = new FoodItemAdapter(options);
         recyclerView.setAdapter(foodItemAdapter);
 
+        //initialize components
         FloatingActionButton cart = (FloatingActionButton)view.findViewById(R.id.cart);
 
+        //get local database phone value
         SharedPreferences shared = getContext().getSharedPreferences("userLoginSession", Context.MODE_PRIVATE);
         String UserPhone = (shared.getString("phone"," "));
 
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone).child("Cart");
+        //firebase query
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone).child("Cart");
 
-        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        //check carts values exists
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() == null) {
-                    cart.setVisibility(View.GONE);
+                    cart.setVisibility(View.GONE); //if not cart button hide
                 }
-
                 else {
-                    cart.setVisibility(View.VISIBLE);
+                    cart.setVisibility(View.VISIBLE); //if it is cart button show
                 }
             }
 
@@ -66,19 +73,16 @@ public class HomeFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                     return;
             }
-        });
+            });
 
-
-        //Click cart
+        //Click cart button
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame, new CartFragment() ); // give your fragment container id in first parameter
-                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
-                transaction.commit();
-
+                //cart fragment open
+                AppCompatActivity activity = (AppCompatActivity)view.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new CartFragment()).addToBackStack(null).commit();
 
             }
         });
@@ -86,12 +90,10 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
         foodItemAdapter.startListening();
-
     }
 
     @Override
@@ -99,6 +101,5 @@ public class HomeFragment extends Fragment {
         super.onStop();
         foodItemAdapter.startListening();
     }
-
 
 }

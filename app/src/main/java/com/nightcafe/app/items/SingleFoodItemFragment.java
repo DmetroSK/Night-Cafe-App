@@ -32,7 +32,6 @@ public class SingleFoodItemFragment extends Fragment {
     Button cartButton;
     DatabaseReference databaseReference;
 
-
     public SingleFoodItemFragment() {
 
     }
@@ -42,29 +41,28 @@ public class SingleFoodItemFragment extends Fragment {
             this.image = image;
             this.regular = regular;
             this.large = large;
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_single_food_item, container, false);
 
         //Session Create
         SessionManager sessionManager = new SessionManager(container.getContext());
         HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
 
         //Get session values
-         UserPhone = userDetails.get(SessionManager.KEY_phone);
+        UserPhone = userDetails.get(SessionManager.KEY_phone);
 
-        View view = inflater.inflate(R.layout.fragment_single_food_item, container, false);
+        //Initialize Components
         ImageView back = view.findViewById(R.id.arrow);
         ImageView plusQty = view.findViewById(R.id.plus);
         ImageView minusQty = view.findViewById(R.id.minus);
         quantity = view.findViewById(R.id.qty);
         totalPrice = view.findViewById(R.id.txtTotal);
-         radioGroup = view.findViewById(R.id.radio);
-         cartButton = view.findViewById(R.id.btnAddToCart);
+        cartButton = view.findViewById(R.id.btnAddToCart);
 
         ImageView imageUrl = view.findViewById(R.id.image);
         TextView  itemName = view.findViewById(R.id.itemName);
@@ -72,6 +70,7 @@ public class SingleFoodItemFragment extends Fragment {
         TextView  regularTag = view.findViewById(R.id.txtRegular);
         TextView  largeTag = view.findViewById(R.id.txtLarge);
 
+        //Set Values from ItemModel
         itemName.setText(name);
         Glide.with(getContext()).load(image).into(imageUrl);
         regularPrice.setText("Rs. " + regular);
@@ -87,113 +86,108 @@ public class SingleFoodItemFragment extends Fragment {
         // find the radiobutton by returned id
         radioButton = view.findViewById(selectedId);
 
+        // regular price from start
         setRegular();
 
+        // listen radio button click
         view.findViewById(R.id.rbtRegular).setOnClickListener(this::onClick);
         view.findViewById(R.id.rbtLarge).setOnClickListener(this::onClick);
 
-        //Click back
+        //Click back button
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //home fragment open
                 AppCompatActivity activity = (AppCompatActivity)view.getContext();
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new HomeFragment()).addToBackStack(null).commit();
 
                 //fragment finish back press not redirect
                 getActivity().getFragmentManager().popBackStack();
 
-                qty=1;
-                totalPrice.setText("Rs. " + String.valueOf(regular));
-
             }
         });
 
-
+        //Click QTY plus button
         plusQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
                 qty++;
                 displayQuantity();
-                 total = basePrice * qty;
-                totalPrice.setText("LKR " + String.valueOf(total));
+                total = basePrice * qty;
+                totalPrice.setText("Rs. " + String.valueOf(total));
 
             }
         });
 
+        //Click QTY minus button
         minusQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                // because we dont want the quantity go less than 0
+                // check quantity decrease <1
                 if (qty == 1) {
                     Toast.makeText(getContext(), "Can't decrease quantity", Toast.LENGTH_SHORT).show();
                 }
                 else {
+
                     qty--;
                     displayQuantity();
                      total = basePrice * qty;
-                   totalPrice.setText("LKR " + String.valueOf(total));
+                   totalPrice.setText("Rs. " + String.valueOf(total));
 
                 }
-
             }
         });
 
-
+        //Click add to cart button
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+               //Check type
                if(type == "Regular")
-               {
-                   price = regular;
-               }
+               {price = regular;}
 
                else if(type == "Large")
-               {
-                   price = large;
-               }
+               {price = large;}
 
                else
-               {
-                   return;
-               }
+               {return;}
 
+               //add to cart function
                 addToCart();
-                Toast.makeText(getContext(),"Added Item" , Toast.LENGTH_SHORT).show();
 
+                //Toast message
+                Toast.makeText(getContext(),"Added Item to Cart" , Toast.LENGTH_SHORT).show();
             }
         });
 
-
         return view;
-
     }
-
 
     private void displayQuantity() {
         quantity.setText(String.valueOf(qty));
     }
 
+    //Set regular price values
     private void setRegular() {
         type = "Regular";
         basePrice = Integer.parseInt(regular);
-         total = basePrice * qty;
+        total = basePrice * qty;
         totalPrice.setText("Rs. " + String.valueOf(total));
     }
 
+    //Set large price values
     private void setLarge() {
         type = "Large";
         basePrice = Integer.parseInt(large);
-         total = basePrice * qty;
+        total = basePrice * qty;
         totalPrice.setText("Rs. " + String.valueOf(total));
     }
 
-
+    //Set regular/large prices to particular item
     public void onClick(View view) {
 
         boolean checked = ((RadioButton) view).isChecked();
@@ -208,6 +202,7 @@ public class SingleFoodItemFragment extends Fragment {
         }
     }
 
+    //add items to database
     private void addToCart(){
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone);
@@ -215,6 +210,5 @@ public class SingleFoodItemFragment extends Fragment {
         databaseReference.child("Cart").push().setValue(itemInfo);
 
     }
-
 
 }

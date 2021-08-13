@@ -67,7 +67,6 @@ public class CartItemAdapter extends FirebaseRecyclerAdapter<CartItemModel,CartI
             holder.qty.setText("*  "+model.getQty()+" =");
             holder.price.setText("Rs. "+ model.getPrice());
 
-
             String key = this.getRef(position).getKey();
 
             Glide.with(holder.image.getContext())
@@ -82,16 +81,17 @@ public class CartItemAdapter extends FirebaseRecyclerAdapter<CartItemModel,CartI
                 @Override
                 public void onClick(View v) {
 
+                    //get local database phone value
                     SharedPreferences shared = holder.remove.getContext().getSharedPreferences("userLoginSession",Context.MODE_PRIVATE);
                     String UserPhone = (shared.getString("phone"," "));
 
-
-                  DatabaseReference cartItemRef = FirebaseDatabase.getInstance().getReference("Users")
+                    //firebase database query
+                    DatabaseReference cartItemRef = FirebaseDatabase.getInstance().getReference("Users")
                             .child(UserPhone).child("Cart");
 
+                    //remove values from firebase
                     DatabaseReference ItemRef = cartItemRef.child(key);
                     ItemRef.removeValue();
-
                 }
             });
 
@@ -99,7 +99,5 @@ public class CartItemAdapter extends FirebaseRecyclerAdapter<CartItemModel,CartI
         catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }

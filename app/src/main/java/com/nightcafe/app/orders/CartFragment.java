@@ -2,6 +2,7 @@ package com.nightcafe.app.orders;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,14 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.HomeFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
+import com.nightcafe.app.items.SingleFoodItemFragment;
+
 import java.util.HashMap;
 
 
 public class CartFragment extends Fragment {
     CartItemAdapter cartItemAdapter;
     String UserPhone;
-    LinearLayout hide;
-    int fTotal;
+    LinearLayout hideSection;
+    int totalSum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,14 +42,16 @@ public class CartFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
+        //set recycle view
         RecyclerView recyclerView =(RecyclerView)view.findViewById(R.id.cartItemRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        TextView stotal = (TextView) view.findViewById(R.id.txtSubTotal);
+        //initialize components
+        TextView subTotal = (TextView) view.findViewById(R.id.txtSubTotal);
         TextView deliveryFee = (TextView) view.findViewById(R.id.txtDeliverFee);
-        TextView FullTotal = (TextView) view.findViewById(R.id.txtTotal);
-
+        TextView Total = (TextView) view.findViewById(R.id.txtTotal);
         Button btnConfirm = (Button) view.findViewById(R.id.btnConfirm);
+        ImageView back = view.findViewById(R.id.arrow);
 
         //Session Create
         SessionManager sessionManager = new SessionManager(container.getContext());
@@ -53,6 +60,7 @@ public class CartFragment extends Fragment {
         //Get session values
          UserPhone = userDetails.get(SessionManager.KEY_phone);
 
+        //database query
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone);
         DatabaseReference cartRef = userRef.child("Cart");
 
@@ -61,56 +69,64 @@ public class CartFragment extends Fragment {
                         .setQuery(cartRef, CartItemModel.class)
                         .build();
 
+        //set data adapter
         cartItemAdapter = new CartItemAdapter(options);
         recyclerView.setAdapter(cartItemAdapter);
 
-         hide = view.findViewById(R.id.hideSection);
+        //components declaration
+        hideSection = view.findViewById(R.id.hideSection);
 
-
+        //recycle view changes listen
         userRef.child("Cart").orderByChild("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 int sum=0;
+
+                //total sum of cart items through firebase
                 for(DataSnapshot data: dataSnapshot.getChildren()){
-                  String s = data.child("price").getValue(String.class);
-                    sum += Integer.parseInt(s);
+                  String sumText = data.child("price").getValue(String.class);
+                    sum += Integer.parseInt(sumText);
 
                 }
-                stotal.setText("Rs. " + String.valueOf(sum));
 
+                //set sub total value
+                subTotal.setText("Rs. " + String.valueOf(sum));
+
+                //set deliver charges fixed value
                 deliveryFee.setText("Rs. 200");
 
-                 fTotal = sum+200;
+                //calculate total sum
+                totalSum = sum+200;
 
-                FullTotal.setText("Rs. " + String.valueOf(fTotal));
+                //set total value
+                Total.setText("Rs. " + String.valueOf(totalSum));
 
-                if(fTotal == 200){
-                    hide.setVisibility(View.VISIBLE);
+                //if cart empty show message and set other values to zero and button disable
+                if(totalSum == 200){
+                    hideSection.setVisibility(View.VISIBLE);
                     deliveryFee.setText("Rs. 0");
-                    FullTotal.setText("Rs. 0");
+                    Total.setText("Rs. 0");
                     btnConfirm.setEnabled(false);
-
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                //Toast message
+                Toast.makeText(getContext(),"Database Error" , Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        ImageView back = view.findViewById(R.id.arrow);
-        //Click back
+        //Click back button
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame, new HomeFragment() ); // give your fragment container id in first parameter
-                transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
-                transaction.commit();
+                //home fragment open
+                AppCompatActivity activity = (AppCompatActivity)view.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new HomeFragment()).addToBackStack(null).commit();
 
                 //fragment finish back press not redirect
                 getActivity().getFragmentManager().popBackStack();

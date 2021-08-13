@@ -43,14 +43,12 @@ public class FoodItemAdapter extends FirebaseRecyclerAdapter<ItemModel,FoodItemA
     }
 
 
-
     @Override
     protected void onBindViewHolder(@NonNull FoodItemAdapter.viewHolder holder, int position, ItemModel model) {
 
 
         try {
             holder.name.setText(model.getName());
-
 
 
             Glide.with(holder.image.getContext())
@@ -61,14 +59,12 @@ public class FoodItemAdapter extends FirebaseRecyclerAdapter<ItemModel,FoodItemA
                     .into(holder.image);
 
 
-
             holder.section.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     AppCompatActivity activity = (AppCompatActivity)view.getContext();
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new SingleFoodItemFragment(model.getName(),model.getImage(),model.getRegular(),model.getLarge())).addToBackStack(null).commit();
-
 
                 }
             });
