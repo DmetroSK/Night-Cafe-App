@@ -12,8 +12,11 @@
         android:id="@+id/arrow"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="18dp"
-        android:src="@drawable/ic_back_arrow"/>
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/ic_back_arrow" />
 
     <TextView
         android:id="@+id/title"
@@ -89,14 +92,14 @@
 
     <Button
         android:id="@+id/submit"
-        android:layout_below="@id/subtitle2"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:layout_height="60dp"
-        android:textColor="@color/white"
-        android:text="Verify Code"/>
+        android:layout_below="@id/subtitle2"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="30dp"
+        android:text="Verify Code"
+        android:textColor="@color/white" />
 
 
 </RelativeLayout>
