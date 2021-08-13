@@ -1,25 +1,17 @@
-package com.nightcafe.app;
+package com.nightcafe.app.items;
 
-import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.FirebaseDatabase;
-
+import com.nightcafe.app.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FoodItemAdapter extends FirebaseRecyclerAdapter<ItemModel,FoodItemAdapter.viewHolder> {
@@ -41,17 +33,11 @@ public class FoodItemAdapter extends FirebaseRecyclerAdapter<ItemModel,FoodItemA
 
             image = (CircleImageView)itemView.findViewById(R.id.image);
             name = (TextView)itemView.findViewById(R.id.name);
-            section = (RelativeLayout)itemView.findViewById(R.id.foodItemSection);
+            section = (RelativeLayout)itemView.findViewById(R.id.framelayout);
 
         }
     }
 
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
     public FoodItemAdapter(@NonNull FirebaseRecyclerOptions<ItemModel> options) {
         super(options);
     }

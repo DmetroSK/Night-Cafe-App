@@ -1,4 +1,4 @@
-package com.nightcafe.app;
+package com.nightcafe.app.items;
 
 public class ItemModel {
 

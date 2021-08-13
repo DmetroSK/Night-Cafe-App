@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,16 +12,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.nightcafe.app.authentication.SignInActivity;
 import com.nightcafe.app.databases.SessionManager;
-
+import com.nightcafe.app.orders.OrdersFragment;
 import java.util.HashMap;
 
 
@@ -47,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         //session
         SessionManager sessionManager = new SessionManager(this);
         HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
+
 
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_nav);

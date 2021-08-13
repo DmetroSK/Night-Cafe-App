@@ -1,35 +1,36 @@
-package com.nightcafe.app;
+package com.nightcafe.app.items;
 
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.nightcafe.app.authentication.SignInActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.nightcafe.app.HomeFragment;
+import com.nightcafe.app.R;
+import com.nightcafe.app.databases.SessionManager;
+import com.nightcafe.app.orders.CartItemModel;
+import java.util.HashMap;
 
 
 public class SingleFoodItemFragment extends Fragment {
 
-    String name,image,regular,large;
+    String name,image,regular,large,type,price,UserPhone;
     TextView quantity,totalPrice;
     RadioButton radioButton;
-    int qty=1,basePrice;
+    int qty=1,basePrice,total;
     RadioGroup radioGroup;
     Button cartButton;
+    DatabaseReference databaseReference;
 
 
     public SingleFoodItemFragment() {
@@ -49,6 +50,13 @@ public class SingleFoodItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //Session Create
+        SessionManager sessionManager = new SessionManager(container.getContext());
+        HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
+
+        //Get session values
+         UserPhone = userDetails.get(SessionManager.KEY_phone);
+
         View view = inflater.inflate(R.layout.fragment_single_food_item, container, false);
         ImageView back = view.findViewById(R.id.arrow);
         ImageView plusQty = view.findViewById(R.id.plus);
@@ -66,10 +74,10 @@ public class SingleFoodItemFragment extends Fragment {
 
         itemName.setText(name);
         Glide.with(getContext()).load(image).into(imageUrl);
-        regularPrice.setText("LKR " + regular);
-        regularTag.setText("LKR " + regular);
-        largeTag.setText("LKR " + large);
-        totalPrice.setText("LKR " + regular);
+        regularPrice.setText("Rs. " + regular);
+        regularTag.setText("Rs. " + regular);
+        largeTag.setText("Rs. " + large);
+        totalPrice.setText("Rs. " + regular);
 
         radioGroup = view.findViewById(R.id.radio);
 
@@ -79,11 +87,10 @@ public class SingleFoodItemFragment extends Fragment {
         // find the radiobutton by returned id
         radioButton = view.findViewById(selectedId);
 
+        setRegular();
+
         view.findViewById(R.id.rbtRegular).setOnClickListener(this::onClick);
         view.findViewById(R.id.rbtLarge).setOnClickListener(this::onClick);
-
-
-
 
         //Click back
         back.setOnClickListener(new View.OnClickListener() {
@@ -97,12 +104,10 @@ public class SingleFoodItemFragment extends Fragment {
                 getActivity().getFragmentManager().popBackStack();
 
                 qty=1;
-                totalPrice.setText("LKR " + String.valueOf(regular));
+                totalPrice.setText("Rs. " + String.valueOf(regular));
 
             }
         });
-
-
 
 
         plusQty.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +117,7 @@ public class SingleFoodItemFragment extends Fragment {
 
                 qty++;
                 displayQuantity();
-                int total = basePrice * qty;
+                 total = basePrice * qty;
                 totalPrice.setText("LKR " + String.valueOf(total));
 
             }
@@ -130,9 +135,8 @@ public class SingleFoodItemFragment extends Fragment {
                 else {
                     qty--;
                     displayQuantity();
-                    int total = basePrice * qty;
+                     total = basePrice * qty;
                    totalPrice.setText("LKR " + String.valueOf(total));
-
 
                 }
 
@@ -140,17 +144,30 @@ public class SingleFoodItemFragment extends Fragment {
         });
 
 
-
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+               if(type == "Regular")
+               {
+                   price = regular;
+               }
 
-                Toast.makeText(getContext(),radioButton.getText() , Toast.LENGTH_SHORT).show();
+               else if(type == "Large")
+               {
+                   price = large;
+               }
+
+               else
+               {
+                   return;
+               }
+
+                addToCart();
+                Toast.makeText(getContext(),"Added Item" , Toast.LENGTH_SHORT).show();
 
             }
         });
-
 
 
         return view;
@@ -158,21 +175,22 @@ public class SingleFoodItemFragment extends Fragment {
     }
 
 
-
     private void displayQuantity() {
         quantity.setText(String.valueOf(qty));
     }
 
     private void setRegular() {
+        type = "Regular";
         basePrice = Integer.parseInt(regular);
-        int total = basePrice * qty;
-        totalPrice.setText("LKR " + String.valueOf(total));
+         total = basePrice * qty;
+        totalPrice.setText("Rs. " + String.valueOf(total));
     }
 
     private void setLarge() {
+        type = "Large";
         basePrice = Integer.parseInt(large);
-        int total = basePrice * qty;
-        totalPrice.setText("LKR " + String.valueOf(total));
+         total = basePrice * qty;
+        totalPrice.setText("Rs. " + String.valueOf(total));
     }
 
 
@@ -187,8 +205,15 @@ public class SingleFoodItemFragment extends Fragment {
             case R.id.rbtLarge:
                 setLarge();break;
 
-
         }
+    }
+
+    private void addToCart(){
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone);
+        CartItemModel itemInfo = new CartItemModel(image,name,type,String.valueOf(qty),String.valueOf(total),"Cart");
+        databaseReference.child("Cart").push().setValue(itemInfo);
+
     }
 
 
