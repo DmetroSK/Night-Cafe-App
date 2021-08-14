@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".settings.ProfileFragment">
+    tools:context=".settings.CardInfoFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:src="@drawable/ic_back_arrow" />
 
             <TextView
-                android:id="@+id/txtProfile"
+                android:id="@+id/txtCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -38,7 +38,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
-                android:text="My Profile"
+                android:text="Payment Card"
                 android:textAlignment="center"
                 android:textColor="@color/ash"
                 android:textSize="30sp" />
@@ -59,15 +59,15 @@
             android:elevation="1dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/fullname"
+                android:id="@+id/cardHolderName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Full Name"
+                android:hint="Card Holder Name"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/black"
-                app:startIconDrawable="@drawable/ic_outline_input">
+                app:startIconDrawable="@drawable/ic_outline_person">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -90,27 +90,28 @@
             android:elevation="1dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email"
+                android:id="@+id/number"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Email"
+                android:hint="Card Number"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/black"
-                app:startIconDrawable="@drawable/ic_outline_email">
+                app:startIconDrawable="@drawable/ic_baseline_payment">
 
                 <com.google.android.material.textfield.TextInputEditText
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="number"
+                    android:maxLength="16"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/layout4"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
@@ -121,49 +122,78 @@
             android:layout_marginBottom="20dp"
             android:elevation="1dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/phone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="Phone"
-                app:startIconDrawable="@drawable/ic_outline_phone"
-                app:endIconMode="clear_text"
-                app:endIconTint="@color/black">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:focusable="false"
-                    android:cursorVisible="false"
-                    android:layout_width="match_parent"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/month"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:maxLength="10" />
+                    android:layout_margin="10dp"
+                    android:hint="Month"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="2" />
 
 
-            </com.google.android.material.textfield.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/editPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/ic_baseline_next"
-                app:tint="@color/ash" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/year"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:hint="Year"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black">
 
-        </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="2" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/cvv"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:hint="CVV"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="3" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnUpdate"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_margin="20dp"
             android:background="@drawable/black_card"
-            android:text="Update"/>
+            android:text="Save"/>
 
 
     </LinearLayout>
+
 
 </FrameLayout>

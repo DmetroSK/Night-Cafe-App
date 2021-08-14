@@ -14,7 +14,7 @@
         android:title="Tracking"/>
 
     <item android:id="@+id/profile_home"
-        android:icon="@drawable/ic_outline_person"
-        android:title="Profile"/>
+        android:icon="@drawable/ic_outline_settings"
+        android:title="Settings"/>
 
 </menu>

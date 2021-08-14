@@ -41,6 +41,7 @@ public class ChangedPhoneActivity extends AppCompatActivity {
         //on start progress bar invisible
         probar.setVisibility(View.GONE);
 
+
         //next button press
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +65,12 @@ public class ChangedPhoneActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangedPhoneActivity.this, SignInActivity.class));
-                finish();
+
+                    startActivity(new Intent(ChangedPhoneActivity.this, SignInActivity.class));
+                    finish();
+
             }
+
         });
 
     }

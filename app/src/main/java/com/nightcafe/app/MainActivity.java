@@ -18,6 +18,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.nightcafe.app.authentication.SignInActivity;
 import com.nightcafe.app.databases.SessionManager;
 import com.nightcafe.app.orders.OrdersFragment;
+import com.nightcafe.app.orders.TrackingFragment;
+import com.nightcafe.app.settings.SettingsFragment;
+
 import java.util.HashMap;
 
 
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.tracking_home:temp = new TrackingFragment();
                         break;
-                    case R.id.profile_home:temp = new ProfileFragment();
+                    case R.id.profile_home:temp = new SettingsFragment();
                         break;
                 }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame,temp).commit();
