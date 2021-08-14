@@ -3,6 +3,8 @@ package com.nightcafe.app.settings;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
+import com.nightcafe.app.CheckoutFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.CardManager;
 import java.util.HashMap;
@@ -17,14 +20,26 @@ import java.util.HashMap;
 public class CardInfoFragment extends Fragment {
 
     CardManager cardManager;
-    String name,number,year,month,cvv;
+    String name,number,year,month,cvv,ref;
     TextInputLayout cardName,cardNumber,cardYear,cardMonth,cardCvv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-              View view = inflater.inflate(R.layout.fragment_card_info, container, false);
+
+            // Get value from fragment
+            Bundle bundle = this.getArguments();
+             if (bundle != null) {
+                 ref = bundle.getString("ref"," ");
+            }
+             else {
+                 ref =" ";
+             }
+
+
+
+        View view = inflater.inflate(R.layout.fragment_card_info, container, false);
 
         //Elements define
         ImageView back = view.findViewById(R.id.arrow);
@@ -62,9 +77,17 @@ public class CardInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //setting fragment open
                 AppCompatActivity activity = (AppCompatActivity)view.getContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new SettingsFragment()).addToBackStack(null).commit();
+
+                if(ref.equals("chk")){
+                    //setting fragment open
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new CheckoutFragment()).addToBackStack(null).commit();
+                }
+
+                else {
+                    //setting fragment open
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new SettingsFragment()).addToBackStack(null).commit();
+                }
 
                 //fragment finish back press not redirect
                 getActivity().getFragmentManager().popBackStack();

@@ -76,6 +76,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 //profile fragment open
                 AppCompatActivity activity = (AppCompatActivity)view.getContext();
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new CardInfoFragment()).addToBackStack(null).commit();

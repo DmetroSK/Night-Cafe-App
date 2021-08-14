@@ -21,9 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nightcafe.app.CheckoutFragment;
 import com.nightcafe.app.HomeFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
+import com.nightcafe.app.settings.AddressFragment;
+
 import java.util.HashMap;
 
 
@@ -115,6 +118,27 @@ public class CartFragment extends Fragment {
             }
         });
 
+
+        //Click back button
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Pass data to card Fragment
+                CheckoutFragment fragment = new CheckoutFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("Total", String.valueOf(totalSum));
+                fragment.setArguments(bundle);
+
+                //checkout fragment open
+                AppCompatActivity activity = (AppCompatActivity)view.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,fragment).addToBackStack(null).commit();
+
+                //fragment finish back press not redirect
+                getActivity().getFragmentManager().popBackStack();
+
+            }
+        });
 
         //Click back button
         back.setOnClickListener(new View.OnClickListener() {
