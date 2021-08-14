@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
+import com.nightcafe.app.items.SingleFoodItemFragment;
+import com.nightcafe.app.profile.ProfileFragment;
 
 public class ChangedPhoneActivity extends AppCompatActivity {
 
@@ -40,6 +42,7 @@ public class ChangedPhoneActivity extends AppCompatActivity {
 
         //on start progress bar invisible
         probar.setVisibility(View.GONE);
+
 
         //next button press
         btn_next.setOnClickListener(new View.OnClickListener() {
@@ -64,9 +67,12 @@ public class ChangedPhoneActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ChangedPhoneActivity.this, SignInActivity.class));
-                finish();
+
+                    startActivity(new Intent(ChangedPhoneActivity.this, SignInActivity.class));
+                    finish();
+
             }
+
         });
 
     }

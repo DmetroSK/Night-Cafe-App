@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".orders.TrackingFragment">
+    tools:context=".profile.CardInfoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ash" />
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,8 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.HomeFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
-import com.nightcafe.app.items.SingleFoodItemFragment;
-
 import java.util.HashMap;
 
 

@@ -34,7 +34,7 @@ public class OtpActivity extends AppCompatActivity {
 
     String fullName,email,phone_signup,phone_signin,phone_update_new,phone_update_old,codeBySystem;
     PinView pinFromUser;
-    static String ref;
+    static String ref,ref2;
     FirebaseAuth firebaseAuth;
     TextView resend,Counter;
 
@@ -59,6 +59,7 @@ public class OtpActivity extends AppCompatActivity {
 
         //Get reference from each particular activity
         ref = getIntent().getStringExtra("_Ref");
+        ref2 = getIntent().getStringExtra("_Ref2");
 
         if(ref.equals("signup")){
 
