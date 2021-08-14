@@ -4,7 +4,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
-import com.nightcafe.app.CheckoutFragment;
+import com.nightcafe.app.orders.CheckoutFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.CardManager;
 import java.util.HashMap;

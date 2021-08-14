@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nightcafe.app.CheckoutFragment;
+import com.nightcafe.app.orders.CheckoutFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
 import java.util.HashMap;

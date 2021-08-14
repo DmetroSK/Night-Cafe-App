@@ -25,7 +25,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="50dp"
             android:text="Settings"
             android:textAlignment="center"
             android:textColor="@color/ash"
@@ -42,15 +42,15 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_below="@id/txtprofile"
-            android:layout_toEndOf="@id/profile_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
-            android:textSize="25sp"
-            android:layout_marginTop="10dp"
+            android:layout_below="@id/txtprofile"
             android:layout_marginLeft="20dp"
-            android:textColor="@color/ash"/>
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/profile_pic"
+            android:text="Name"
+            android:textColor="@color/ash"
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/phone"
@@ -161,34 +161,64 @@
 
             <RelativeLayout
                 android:id="@+id/subRaw4"
-                android:layout_margin="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_logout"
-                    app:tint="@color/ash"/>
+                    app:tint="@color/ash" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Log Out"
-                    android:layout_marginLeft="40dp"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/ash"/>
+                    android:layout_marginLeft="40dp"
+                    android:text="Log Out"
+                    android:textColor="@color/ash" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_baseline_next"
-                    app:tint="@color/ash"/>
+                    app:tint="@color/ash" />
 
             </RelativeLayout>
 
+
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_main_logo_black" />
+
+            <TextView
+                android:layout_below="@id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="40dp"
+                android:text="Night Cafe  V 1.0"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/ash" />
+
+        </RelativeLayout>
+
 
 
     </LinearLayout>

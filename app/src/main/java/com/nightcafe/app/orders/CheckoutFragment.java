@@ -1,38 +1,29 @@
-package com.nightcafe.app;
+package com.nightcafe.app.orders;
 
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nightcafe.app.authentication.OtpActivity;
-import com.nightcafe.app.authentication.UpdateSuccessActivity;
+import com.nightcafe.app.R;
 import com.nightcafe.app.databases.CardManager;
 import com.nightcafe.app.databases.SessionManager;
 import com.nightcafe.app.orders.CartFragment;
 import com.nightcafe.app.orders.TrackingFragment;
 import com.nightcafe.app.settings.AddressFragment;
 import com.nightcafe.app.settings.CardInfoFragment;
-import com.nightcafe.app.settings.SettingsFragment;
-
 import java.util.HashMap;
 
 public class CheckoutFragment extends Fragment {
