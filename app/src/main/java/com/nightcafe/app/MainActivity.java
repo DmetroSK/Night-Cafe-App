@@ -19,6 +19,7 @@ import com.nightcafe.app.authentication.SignInActivity;
 import com.nightcafe.app.databases.SessionManager;
 import com.nightcafe.app.orders.OrdersFragment;
 import com.nightcafe.app.orders.TrackingFragment;
+import com.nightcafe.app.settings.SettingsFragment;
 
 import java.util.HashMap;
 

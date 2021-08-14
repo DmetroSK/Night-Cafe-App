@@ -18,8 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
-import com.nightcafe.app.items.SingleFoodItemFragment;
-import com.nightcafe.app.profile.ProfileFragment;
 
 public class ChangedPhoneActivity extends AppCompatActivity {
 

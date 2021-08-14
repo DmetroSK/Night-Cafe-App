@@ -1,28 +1,21 @@
-package com.nightcafe.app.profile;
+package com.nightcafe.app.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.R;
-import com.nightcafe.app.authentication.ChangedPhoneActivity;
 import com.nightcafe.app.authentication.UpdatePhoneActivity;
 import com.nightcafe.app.databases.SessionManager;
-import com.nightcafe.app.SettingsFragment;
 
 import java.util.HashMap;
 
@@ -39,28 +32,26 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         //session
-         sessionManager = new SessionManager(container.getContext());
+        sessionManager = new SessionManager(container.getContext());
         HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
 
         //Get session values
         String UserName = userDetails.get(SessionManager.KEY_NAME);
-         UserPhone = userDetails.get(SessionManager.KEY_phone);
+        UserPhone = userDetails.get(SessionManager.KEY_phone);
         String UserEmail = userDetails.get(SessionManager.KEY_email);
 
         //Elements define
-         name = view.findViewById(R.id.fullname);
-         email = view.findViewById(R.id.email);
+        name = view.findViewById(R.id.fullname);
+        email = view.findViewById(R.id.email);
         TextInputLayout phone = view.findViewById(R.id.phone);
         Button update = view.findViewById(R.id.btnUpdate);
         ImageView back = view.findViewById(R.id.arrow);
         ImageView editPhone = view.findViewById(R.id.editPhone);
 
-
         //Set Values
         name.getEditText().setText(UserName);
         email.getEditText().setText(UserEmail);
         phone.getEditText().setText(UserPhone);
-
 
         //back button press
         back.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +89,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
 
 
         return view;

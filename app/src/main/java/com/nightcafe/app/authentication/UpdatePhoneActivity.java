@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
-import com.nightcafe.app.profile.ProfileFragment;
+import com.nightcafe.app.settings.ProfileFragment;
 
 public class UpdatePhoneActivity extends AppCompatActivity {
 
