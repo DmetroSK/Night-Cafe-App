@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nightcafe.app.CheckoutFragment;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 public class AddressFragment extends Fragment {
 
     TextInputLayout street,city;
-    String UserPhone;
+    String UserPhone,ref;
     SessionManager sessionManager;
     DatabaseReference reference;
 
@@ -32,6 +33,15 @@ public class AddressFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Get value from fragment
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            ref = bundle.getString("ref"," ");
+        }
+        else {
+            ref =" ";
+        }
 
         View view = inflater.inflate(R.layout.fragment_address, container, false);
 
@@ -81,9 +91,17 @@ public class AddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //setting fragment open
                 AppCompatActivity activity = (AppCompatActivity)view.getContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new SettingsFragment()).addToBackStack(null).commit();
+
+                if(ref.equals("chk")){
+                    //setting fragment open
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new CheckoutFragment()).addToBackStack(null).commit();
+                }
+
+                else {
+                    //setting fragment open
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame,new SettingsFragment()).addToBackStack(null).commit();
+                }
 
                 //fragment finish back press not redirect
                 getActivity().getFragmentManager().popBackStack();
