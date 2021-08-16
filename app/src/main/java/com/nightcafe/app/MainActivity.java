@@ -42,12 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frame,new HomeFragment()).commit();
 
-        //session
-        SessionManager sessionManager = new SessionManager(this);
-        HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
-
-
-
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -62,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.tracking_home:temp = new TrackingFragment();
                         break;
-                    case R.id.profile_home:temp = new SettingsFragment();
+                    case R.id.settings_home:temp = new SettingsFragment();
                         break;
                 }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame,temp).commit();
@@ -75,11 +69,8 @@ public class MainActivity extends AppCompatActivity {
             showCustomDialog();
         }
         else {
-
-//            code
-
+            return;
         }
-
 
     }
 

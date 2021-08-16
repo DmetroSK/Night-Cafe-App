@@ -58,7 +58,7 @@ public class TrackingFragment extends Fragment {
         UserPhone = userDetails.get(SessionManager.KEY_phone);
 
         //Get values from firebase
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(UserPhone).child("Orders");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone);
 
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override

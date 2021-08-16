@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
+import com.nightcafe.app.authentication.User;
 import com.nightcafe.app.databases.CardManager;
 import com.nightcafe.app.databases.SessionManager;
 import com.nightcafe.app.orders.CartFragment;
@@ -178,16 +179,19 @@ public class CheckoutFragment extends Fragment {
             public void onClick(View v) {
 
                 reference.child("Cart").get().addOnSuccessListener(dataSnapshot -> {
-                    reference.child("Orders").setValue(dataSnapshot.getValue());
+                    FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone).setValue(dataSnapshot.getValue());
                     reference.child("Cart").removeValue();
                 });
+
+
 
                 Handler h = new Handler();
                 h.postDelayed(new Runnable(){
                     @Override
                     public void run() {
 
-                        reference.child("Orders").child("status").setValue("pending");
+                        FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone).child("status").setValue("pending");
+                        FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone).child("phone").setValue(UserPhone);
 
                         Toast.makeText(getContext(),"Order Placed" , Toast.LENGTH_SHORT).show();
 
