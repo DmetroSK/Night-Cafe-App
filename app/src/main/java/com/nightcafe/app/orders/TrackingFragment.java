@@ -64,18 +64,28 @@ public class TrackingFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //Set Values from database
-              status =  dataSnapshot.child("status").getValue(String.class);
 
-              setVisible();
+              if(dataSnapshot.getValue() != null)
+              {
+                  //Set Values from database
+                  status =  dataSnapshot.child("status").getValue(String.class);
+                  setVisible();
+              }
+              else {
+                  hideSection.setVisibility(View.VISIBLE);
+              }
+
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                hideSection.setVisibility(View.VISIBLE);
+
+            }
         };
 
-        reference.addListenerForSingleValueEvent(valueEventListener);
+        reference.addValueEventListener(valueEventListener);
 
         //call button press
         call.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +107,30 @@ public class TrackingFragment extends Fragment {
         {
             bottomSection.setVisibility(View.VISIBLE);
             track1.setVisibility(View.VISIBLE);
-            track2.setVisibility(View.VISIBLE);
 
         }
+       else if(status.equals("preparing"))
+        {
+            bottomSection.setVisibility(View.VISIBLE);
+            track1.setVisibility(View.VISIBLE);
+            track2.setVisibility(View.VISIBLE);
+        }
+        else if(status.equals("dispatched"))
+        {
+            bottomSection.setVisibility(View.VISIBLE);
+            track1.setVisibility(View.VISIBLE);
+            track2.setVisibility(View.VISIBLE);
+            track3.setVisibility(View.VISIBLE);
+        }
+        else if(status.equals("completed"))
+        {
+            bottomSection.setVisibility(View.VISIBLE);
+            track1.setVisibility(View.VISIBLE);
+            track2.setVisibility(View.VISIBLE);
+            track3.setVisibility(View.VISIBLE);
+            track4.setVisibility(View.VISIBLE);
+        }
+
         else {
             hideSection.setVisibility(View.VISIBLE);
         }

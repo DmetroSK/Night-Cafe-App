@@ -179,7 +179,7 @@ public class CheckoutFragment extends Fragment {
             public void onClick(View v) {
 
                 reference.child("Cart").get().addOnSuccessListener(dataSnapshot -> {
-                    FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone).setValue(dataSnapshot.getValue());
+                    FirebaseDatabase.getInstance().getReference("Orders").child(UserPhone).child("Order").setValue(dataSnapshot.getValue());
                     reference.child("Cart").removeValue();
                 });
 
