@@ -1,21 +1,14 @@
 package com.nightcafe.app.orders;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,9 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nightcafe.app.R;
 import com.nightcafe.app.databases.SessionManager;
-
 import java.util.HashMap;
-
 
 public class TrackingFragment extends Fragment {
 
@@ -41,14 +32,13 @@ public class TrackingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tracking, container, false);
 
         //components declaration
-         hideSection = view.findViewById(R.id.hideSection);
+        hideSection = view.findViewById(R.id.hideSection);
         bottomSection = view.findViewById(R.id.bottomSection);
-         track1 = view.findViewById(R.id.track1);
-         track2 = view.findViewById(R.id.track2);
-         track3 = view.findViewById(R.id.track3);
-         track4 = view.findViewById(R.id.track4);
-         call = view.findViewById(R.id.btnCall);
-
+        track1 = view.findViewById(R.id.track1);
+        track2 = view.findViewById(R.id.track2);
+        track3 = view.findViewById(R.id.track3);
+        track4 = view.findViewById(R.id.track4);
+        call = view.findViewById(R.id.btnCall);
 
         //session
         SessionManager sessionManager = new SessionManager(container.getContext());
@@ -64,7 +54,6 @@ public class TrackingFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-
               if(dataSnapshot.getValue() != null)
               {
                   //Set Values from database
@@ -74,7 +63,6 @@ public class TrackingFragment extends Fragment {
               else {
                   hideSection.setVisibility(View.VISIBLE);
               }
-
 
             }
 
@@ -97,11 +85,10 @@ public class TrackingFragment extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
+    //set visibility from order state
     private void setVisible(){
         if(status.equals("pending"))
         {

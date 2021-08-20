@@ -1,9 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".orders.OrdersFragment">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/topText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Order Details"
+                    android:textAlignment="center"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/currentOrderRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/topText"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="10dp" />
+
+                <RelativeLayout
+                    android:id="@+id/thirdSection"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/currentOrderRV">
+
+                    <TextView
+                        android:id="@+id/subTotalLable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sub Total"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtSubTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="Rs. 000"
+                        android:textSize="15sp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/fourthSection"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/thirdSection">
+
+                    <TextView
+                        android:id="@+id/deliverLable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Deliver Fee"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/txtDeliverFee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="Rs. 000"
+                        android:textSize="15sp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/fifthSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fourthSection"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="40dp">
+
+                    <TextView
+                        android:id="@+id/totalLable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="Rs. 000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/hideSection1"
+                    android:layout_below="@id/topText"
+                    android:layout_marginTop="100dp"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Oops !"
+                        android:textAlignment="center"
+                        android:textSize="50sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="No orders"
+                        android:textSize="30sp"
+                        android:textAlignment="center"
+                        android:textStyle="bold"/>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+
 
 
 </FrameLayout>
