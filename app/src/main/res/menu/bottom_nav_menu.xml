@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_outline_track"
         android:title="Tracking"/>
 
-    <item android:id="@+id/profile_home"
+    <item android:id="@+id/settings_home"
         android:icon="@drawable/ic_outline_settings"
         android:title="Settings"/>
 

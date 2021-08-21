@@ -14,18 +14,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.nightcafe.app.CheckoutFragment;
 import com.nightcafe.app.HomeFragment;
 import com.nightcafe.app.R;
+import com.nightcafe.app.databases.CardManager;
 import com.nightcafe.app.databases.SessionManager;
-import com.nightcafe.app.settings.AddressFragment;
+import com.nightcafe.app.databases.ValueManager;
 
 import java.util.HashMap;
 
@@ -56,6 +55,8 @@ public class CartFragment extends Fragment {
         //Session Create
         SessionManager sessionManager = new SessionManager(container.getContext());
         HashMap<String,String> userDetails = sessionManager.getUserDetailFromSession();
+        ValueManager valueManager = new ValueManager(container.getContext());
+        HashMap<String,String> valueData = valueManager.getValues();
 
         //Get session values
          UserPhone = userDetails.get(SessionManager.KEY_phone);
@@ -126,9 +127,9 @@ public class CartFragment extends Fragment {
 
                 // Pass data to card Fragment
                 CheckoutFragment fragment = new CheckoutFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("Total", String.valueOf(totalSum));
-                fragment.setArguments(bundle);
+
+                //Set Values
+                valueManager.saveValues(String.valueOf(totalSum));
 
                 //checkout fragment open
                 AppCompatActivity activity = (AppCompatActivity)view.getContext();

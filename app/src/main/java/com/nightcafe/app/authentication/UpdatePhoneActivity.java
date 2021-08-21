@@ -73,11 +73,10 @@ public class UpdatePhoneActivity extends AppCompatActivity {
 
                 if (ref.equals("profile")) {
                     getSupportFragmentManager().beginTransaction().add(android.R.id.content, new ProfileFragment()).commit();
-                    finish();
                 } else {
                     startActivity(new Intent(UpdatePhoneActivity.this, ChangedPhoneActivity.class));
-                    finish();
                 }
+                finish();
 
             }
         });

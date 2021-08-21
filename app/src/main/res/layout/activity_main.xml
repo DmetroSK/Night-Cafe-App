@@ -15,21 +15,6 @@
         android:background="@color/light_blue"/>
 
 
-<!--    <Button-->
-<!--        android:id="@+id/logout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Sign Out"-->
-<!--        android:layout_centerInParent="true"/>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/txtname"-->
-<!--        android:layout_below="@id/logout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Name"-->
-<!--        android:layout_centerHorizontal="true" />-->
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="60dp"

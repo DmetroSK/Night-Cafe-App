@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.nightcafe.app.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class CartItemAdapter extends FirebaseRecyclerAdapter<CartItemModel,CartItemAdapter.viewHolder> {
 
     @NonNull
@@ -71,9 +70,9 @@ public class CartItemAdapter extends FirebaseRecyclerAdapter<CartItemModel,CartI
 
             Glide.with(holder.image.getContext())
                     .load(model.getImage())
-                    .placeholder(R.drawable.common_google_signin_btn_icon_dark)
+                    .placeholder(R.drawable.ic_main_logo_black)
                     .circleCrop()
-                    .error(R.drawable.common_google_signin_btn_icon_dark_normal)
+                    .error(R.drawable.ic_main_logo_black)
                     .into(holder.image);
 
 
